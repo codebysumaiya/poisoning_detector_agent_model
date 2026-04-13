@@ -1,0 +1,99 @@
+{
+  "clean_scores": {
+    "faithfulness": 0.7333816190913378,
+    "answer_relevancy": 0.9666666666666667,
+    "context_recall": 0.5879944863320822,
+    "context_precision": 0.30250144479203994
+  },
+  "attack_comparisons": {
+    "Label Flipping": {
+      "faithfulness": {
+        "clean": 0.7333816190913378,
+        "poisoned": 0.7347275361981245,
+        "drop": -0.0013459171067866649
+      },
+      "answer_relevancy": {
+        "clean": 0.9666666666666667,
+        "poisoned": 0.9666666666666667,
+        "drop": 0.0
+      },
+      "context_recall": {
+        "clean": 0.5879944863320822,
+        "poisoned": 0.5879944863320822,
+        "drop": 0.0
+      },
+      "context_precision": {
+        "clean": 0.30250144479203994,
+        "poisoned": 0.30250144479203994,
+        "drop": 0.0
+      }
+    },
+    "Backdoor Trigger": {
+      "faithfulness": {
+        "clean": 0.7333816190913378,
+        "poisoned": 0.741259067729656,
+        "drop": -0.007877448638318185
+      },
+      "answer_relevancy": {
+        "clean": 0.9666666666666667,
+        "poisoned": 0.9666666666666667,
+        "drop": 0.0
+      },
+      "context_recall": {
+        "clean": 0.5879944863320822,
+        "poisoned": 0.5879944863320822,
+        "drop": 0.0
+      },
+      "context_precision": {
+        "clean": 0.30250144479203994,
+        "poisoned": 0.30250144479203994,
+        "drop": 0.0
+      }
+    },
+    "Noise Injection": {
+      "faithfulness": {
+        "clean": 0.7333816190913378,
+        "poisoned": 0.7558424010629893,
+        "drop": -0.022460781971651467
+      },
+      "answer_relevancy": {
+        "clean": 0.9666666666666667,
+        "poisoned": 0.9666666666666667,
+        "drop": 0.0
+      },
+      "context_recall": {
+        "clean": 0.5879944863320822,
+        "poisoned": 0.5879944863320822,
+        "drop": 0.0
+      },
+      "context_precision": {
+        "clean": 0.30250144479203994,
+        "poisoned": 0.30250144479203994,
+        "drop": 0.0
+      }
+    },
+    "Semantic Poison": {
+      "faithfulness": {
+        "clean": 0.7333816190913378,
+        "poisoned": 0.763757960449137,
+        "drop": -0.030376341357799208
+      },
+      "answer_relevancy": {
+        "clean": 0.9666666666666667,
+        "poisoned": 0.9666666666666667,
+        "drop": 0.0
+      },
+      "context_recall": {
+        "clean": 0.5879944863320822,
+        "poisoned": 0.5879944863320822,
+        "drop": 0.0
+      },
+      "context_precision": {
+        "clean": 0.30250144479203994,
+        "poisoned": 0.3011556136926588,
+        "drop": 0.001345831099381134
+      }
+    }
+  },
+  "timestamp": "2026-04-11T11:24:20.868453"
+}

@@ -1,0 +1,37 @@
+# ─── Core LangChain stack ───────────────────────────────────────
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-ollama==0.2.1
+langchain-huggingface==0.1.2
+
+# ─── Local LLM via Ollama ────────────────────────────────────────
+ollama==0.3.3
+
+# ─── Embeddings ──────────────────────────────────────────────────
+sentence-transformers==3.2.1
+transformers==4.46.3
+torch==2.5.1          # CPU-only build; install separately if needed (see README)
+
+# ─── Vector databases ────────────────────────────────────────────
+faiss-cpu==1.9.0
+chromadb==0.5.18
+
+# ─── PDF processing ──────────────────────────────────────────────
+pymupdf==1.24.14
+pypdf==5.1.0
+reportlab==4.2.5
+
+# ─── RAG evaluation ──────────────────────────────────────────────
+ragas==0.2.5
+datasets==3.1.0
+
+# ─── Data / utilities ────────────────────────────────────────────
+numpy==1.26.4
+pandas==2.2.3
+python-dotenv==1.0.1
+tqdm==4.67.1
+colorama==0.4.6
+
+# ─── Notebook support (optional but recommended) ─────────────────
+jupyter==1.1.1
+ipykernel==6.29.5

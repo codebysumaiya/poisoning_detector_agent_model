@@ -1,0 +1,289 @@
+{
+  "chat_20260411_150538": {
+    "title": " RAG retrieves top-4 chunks from k...",
+    "mode": "Clean",
+    "created": "11 Apr 2026, 15:05",
+    "messages": [
+      {
+        "role": "user",
+        "content": " RAG retrieves top-4 chunks from knowledge base",
+        "time": "15:06"
+      },
+      {
+        "role": "assistant",
+        "content": "I cannot find this information in the provided documents.",
+        "time": "15:06",
+        "validation": {
+          "passed": false,
+          "issues": [
+            "answer_too_short (9 words, min=15)",
+            "refusal_detected (i (cannot|can't|don't|do not) (find|know|have|provide))",
+            "low_context_overlap (0.17 < 0.25)"
+          ],
+          "poisoned_srcs": [],
+          "retry_count": 2,
+          "refined": true
+        },
+        "sources": [
+          {
+            "source": "rag_systems_guide.pdf",
+            "poisoned": false,
+            "snippet": "relevant documents from a knowledge base using semantic similarity. The Generator (an LLM)\nproduces answers conditioned on both the query and retrieve"
+          },
+          {
+            "source": "rag_systems_guide.pdf",
+            "poisoned": false,
+            "snippet": "7. Advanced RAG Techniques\nHyDE (Hypothetical Document Embeddings) generates a hypothetical answer and embeds it for\nretrieval. Multi-Query Retrieval"
+          },
+          {
+            "source": "rag_systems_guide.pdf",
+            "poisoned": false,
+            "snippet": "Retrieval-Augmented Generation (RAG): A\nComprehensive Guide\nRetrieval-Augmented Generation (RAG) is an AI framework that combines the strengths of\nret"
+          },
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "recently added sources.\nConfidence Scoring: Use embedding similarity between the query and retrieved chunks to detect\nlow-relevance retrievals.\nSemant"
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "RAG retrieves top-4 chunks from knowledge base",
+        "time": "15:07"
+      },
+      {
+        "role": "assistant",
+        "content": "I cannot find this information in the provided documents.",
+        "time": "15:07",
+        "validation": {
+          "passed": false,
+          "issues": [
+            "answer_too_short (9 words, min=15)",
+            "refusal_detected (i (cannot|can't|don't|do not) (find|know|have|provide))",
+            "low_context_overlap (0.17 < 0.25)"
+          ],
+          "poisoned_srcs": [],
+          "retry_count": 2,
+          "refined": true
+        },
+        "sources": [
+          {
+            "source": "rag_systems_guide.pdf",
+            "poisoned": false,
+            "snippet": "relevant documents from a knowledge base using semantic similarity. The Generator (an LLM)\nproduces answers conditioned on both the query and retrieve"
+          },
+          {
+            "source": "rag_systems_guide.pdf",
+            "poisoned": false,
+            "snippet": "7. Advanced RAG Techniques\nHyDE (Hypothetical Document Embeddings) generates a hypothetical answer and embeds it for\nretrieval. Multi-Query Retrieval"
+          },
+          {
+            "source": "rag_systems_guide.pdf",
+            "poisoned": false,
+            "snippet": "Retrieval-Augmented Generation (RAG): A\nComprehensive Guide\nRetrieval-Augmented Generation (RAG) is an AI framework that combines the strengths of\nret"
+          },
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "recently added sources.\nConfidence Scoring: Use embedding similarity between the query and retrieved chunks to detect\nlow-relevance retrievals.\nSemant"
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "how are you",
+        "time": "15:09"
+      },
+      {
+        "role": "assistant",
+        "content": "I cannot find this information in the provided documents.",
+        "time": "15:09",
+        "validation": {
+          "passed": false,
+          "issues": [
+            "answer_too_short (9 words, min=15)",
+            "refusal_detected (i (cannot|can't|don't|do not) (find|know|have|provide))"
+          ],
+          "poisoned_srcs": [],
+          "retry_count": 2,
+          "refined": true
+        },
+        "sources": [
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "4. Defense Strategies\nInput sanitization should be applied to all documents before ingestion. Cryptographic hashing can verify\ndocument integrity at r"
+          },
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "be misled by plausible-looking but false retrieved context. Backdoor attacks can cause the system to\nleak sensitive information when triggered. Noise"
+          },
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "recently added sources.\nConfidence Scoring: Use embedding similarity between the query and retrieved chunks to detect\nlow-relevance retrievals.\nSemant"
+          },
+          {
+            "source": "rag_systems_guide.pdf",
+            "poisoned": false,
+            "snippet": "deployments.\n6. RAG Evaluation Metrics\nFaithfulness: Measures whether the answer is grounded in the retrieved context. Score 0-1.\nAnswer Relevancy: Me"
+          }
+        ]
+      }
+    ]
+  },
+  "chat_20260413_101710": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr 2026, 10:17",
+    "messages": []
+  },
+  "chat_20260413_101711": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr 2026, 10:17",
+    "messages": []
+  },
+  "chat_20260413_102137": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 10:21",
+    "messages": []
+  },
+  "chat_20260413_102155": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 10:21",
+    "messages": []
+  },
+  "chat_20260413_104530": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 10:45",
+    "messages": []
+  },
+  "chat_20260413_104711": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 10:47",
+    "messages": []
+  },
+  "chat_20260413_104834": {
+    "title": "machine learning",
+    "mode": "Clean",
+    "created": "13 Apr, 10:48",
+    "messages": [
+      {
+        "role": "user",
+        "content": "machine learning",
+        "time": "11:00"
+      },
+      {
+        "role": "assistant",
+        "content": "Machine learning (ML) is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on developing computer programs that can access data and use it to learn for themselves.",
+        "time": "11:00",
+        "validation": {
+          "passed": true,
+          "issues": [],
+          "poisoned_srcs": [],
+          "retry_count": 0,
+          "refined": false
+        },
+        "sources": [
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "Introduction to Machine Learning\nMachine learning (ML) is a subset of artificial intelligence that enables systems to learn and improve\nfrom experienc"
+          },
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "of an input and the desired output. Common algorithms include Linear Regression, Decision Trees,\nSupport Vector Machines, and Neural Networks. Applica"
+          },
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "open-source platform for machine learning developed by Google. PyTorch is a deep learning\nframework developed by Facebook's AI Research lab. Pandas is"
+          },
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "PCA reduce the number of features. Applications include customer segmentation and anomaly\ndetection.\nReinforcement Learning: An agent learns by intera"
+          }
+        ]
+      }
+    ]
+  },
+  "chat_20260413_111143": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 11:11",
+    "messages": []
+  },
+  "chat_20260413_111213": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 11:12",
+    "messages": []
+  },
+  "chat_20260413_112035": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 11:20",
+    "messages": []
+  },
+  "chat_20260413_144011": {
+    "title": "what is machine learning",
+    "mode": "Clean",
+    "created": "13 Apr, 14:40",
+    "messages": [
+      {
+        "role": "user",
+        "content": "what is machine learning",
+        "time": "14:40"
+      },
+      {
+        "role": "assistant",
+        "content": "Machine learning (ML) is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on developing computer programs that can access data and use it to learn for themselves.",
+        "time": "14:40",
+        "validation": {
+          "passed": true,
+          "issues": [],
+          "poisoned_srcs": [],
+          "retry_count": 0,
+          "refined": false
+        },
+        "sources": [
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "Introduction to Machine Learning\nMachine learning (ML) is a subset of artificial intelligence that enables systems to learn and improve\nfrom experienc"
+          },
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "of an input and the desired output. Common algorithms include Linear Regression, Decision Trees,\nSupport Vector Machines, and Neural Networks. Applica"
+          },
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "open-source platform for machine learning developed by Google. PyTorch is a deep learning\nframework developed by Facebook's AI Research lab. Pandas is"
+          },
+          {
+            "source": "machine_learning_intro.pdf",
+            "poisoned": false,
+            "snippet": "sets.\nGradient Descent: An optimization algorithm used to minimize the loss function during training.\nHyperparameters: Configuration settings of the m"
+          }
+        ]
+      }
+    ]
+  },
+  "chat_20260413_193833": {
+    "title": "New conversation",
+    "mode": "Clean",
+    "created": "13 Apr, 19:38",
+    "messages": []
+  }
+}
