@@ -186,13 +186,26 @@ def make_pdf2():
     story.append(t)
     story.append(SP())
 
-    story.append(Paragraph("5. Vector Databases", H2))
+    story.append(Paragraph("5. Vector Databases and FAISS", H2))
     story.append(Paragraph(
-        "FAISS (Facebook AI Similarity Search) is an open-source library for efficient similarity search. "
-        "It supports CPU and GPU operation and can handle millions of vectors. "
+        "FAISS (Facebook AI Similarity Search) is an open-source library developed by Meta (Facebook) "
+        "for efficient similarity search and clustering of dense vectors. FAISS works by building an index "
+        "over a collection of embedding vectors and performing approximate nearest-neighbor (ANN) search "
+        "to find the most similar vectors to any query vector. "
+        "FAISS supports multiple index types: IndexFlatL2 performs exact brute-force L2 distance search; "
+        "IndexFlatIP uses inner product (cosine similarity); IndexIVFFlat partitions vectors into Voronoi "
+        "cells for faster approximate search; IndexHNSWFlat uses a hierarchical navigable small-world graph "
+        "for very fast ANN search. "
+        "FAISS can operate on CPU or GPU and is designed to handle millions to billions of vectors efficiently. "
+        "In a RAG system, FAISS stores the embeddings of all document chunks. When a query arrives, "
+        "it is converted to an embedding and FAISS retrieves the top-k most similar chunks using similarity "
+        "search. The similarity metric is typically cosine similarity or L2 distance.",
+        NM))
+    story.append(SP(6))
+    story.append(Paragraph(
         "ChromaDB is an open-source embedding database designed for AI applications. "
         "It provides persistence, filtering, and metadata support out of the box. "
-        "Pinecone and Weaviate are cloud-hosted alternatives suited for production deployments.",
+        "Pinecone and Weaviate are cloud-hosted vector database alternatives suited for production deployments.",
         NM))
     story.append(SP())
 

@@ -1,119 +1,51 @@
 {
-  "chat_20260411_150538": {
-    "title": " RAG retrieves top-4 chunks from k...",
-    "mode": "Clean",
-    "created": "11 Apr 2026, 15:05",
+  "chat_20260415_100830": {
+    "title": "hi",
+    "created": "15 Apr, 10:08",
     "messages": [
       {
         "role": "user",
-        "content": " RAG retrieves top-4 chunks from knowledge base",
-        "time": "15:06"
+        "content": "hi",
+        "time": "10:08"
       },
       {
         "role": "assistant",
-        "content": "I cannot find this information in the provided documents.",
-        "time": "15:06",
+        "content": "Hi there! \ud83d\udc4b How can I help you today?",
+        "time": "10:08",
         "validation": {
-          "passed": false,
-          "issues": [
-            "answer_too_short (9 words, min=15)",
-            "refusal_detected (i (cannot|can't|don't|do not) (find|know|have|provide))",
-            "low_context_overlap (0.17 < 0.25)"
-          ],
+          "passed": true,
+          "issues": [],
           "poisoned_srcs": [],
-          "retry_count": 2,
-          "refined": true
+          "retry_count": 0,
+          "refined": false,
+          "is_greeting": true,
+          "no_info": false
         },
-        "sources": [
-          {
-            "source": "rag_systems_guide.pdf",
-            "poisoned": false,
-            "snippet": "relevant documents from a knowledge base using semantic similarity. The Generator (an LLM)\nproduces answers conditioned on both the query and retrieve"
-          },
-          {
-            "source": "rag_systems_guide.pdf",
-            "poisoned": false,
-            "snippet": "7. Advanced RAG Techniques\nHyDE (Hypothetical Document Embeddings) generates a hypothetical answer and embeds it for\nretrieval. Multi-Query Retrieval"
-          },
-          {
-            "source": "rag_systems_guide.pdf",
-            "poisoned": false,
-            "snippet": "Retrieval-Augmented Generation (RAG): A\nComprehensive Guide\nRetrieval-Augmented Generation (RAG) is an AI framework that combines the strengths of\nret"
-          },
-          {
-            "source": "data_poisoning_attacks.pdf",
-            "poisoned": false,
-            "snippet": "recently added sources.\nConfidence Scoring: Use embedding similarity between the query and retrieved chunks to detect\nlow-relevance retrievals.\nSemant"
-          }
-        ]
+        "sources": []
       },
       {
         "role": "user",
-        "content": "RAG retrieves top-4 chunks from knowledge base",
-        "time": "15:07"
+        "content": "How does FAISS work?",
+        "time": "10:08"
       },
       {
         "role": "assistant",
         "content": "I cannot find this information in the provided documents.",
-        "time": "15:07",
+        "time": "10:08",
         "validation": {
-          "passed": false,
-          "issues": [
-            "answer_too_short (9 words, min=15)",
-            "refusal_detected (i (cannot|can't|don't|do not) (find|know|have|provide))",
-            "low_context_overlap (0.17 < 0.25)"
-          ],
+          "passed": true,
+          "issues": [],
           "poisoned_srcs": [],
-          "retry_count": 2,
-          "refined": true
+          "retry_count": 0,
+          "refined": false,
+          "is_greeting": false,
+          "no_info": true
         },
         "sources": [
           {
             "source": "rag_systems_guide.pdf",
             "poisoned": false,
-            "snippet": "relevant documents from a knowledge base using semantic similarity. The Generator (an LLM)\nproduces answers conditioned on both the query and retrieve"
-          },
-          {
-            "source": "rag_systems_guide.pdf",
-            "poisoned": false,
-            "snippet": "7. Advanced RAG Techniques\nHyDE (Hypothetical Document Embeddings) generates a hypothetical answer and embeds it for\nretrieval. Multi-Query Retrieval"
-          },
-          {
-            "source": "rag_systems_guide.pdf",
-            "poisoned": false,
-            "snippet": "Retrieval-Augmented Generation (RAG): A\nComprehensive Guide\nRetrieval-Augmented Generation (RAG) is an AI framework that combines the strengths of\nret"
-          },
-          {
-            "source": "data_poisoning_attacks.pdf",
-            "poisoned": false,
-            "snippet": "recently added sources.\nConfidence Scoring: Use embedding similarity between the query and retrieved chunks to detect\nlow-relevance retrievals.\nSemant"
-          }
-        ]
-      },
-      {
-        "role": "user",
-        "content": "how are you",
-        "time": "15:09"
-      },
-      {
-        "role": "assistant",
-        "content": "I cannot find this information in the provided documents.",
-        "time": "15:09",
-        "validation": {
-          "passed": false,
-          "issues": [
-            "answer_too_short (9 words, min=15)",
-            "refusal_detected (i (cannot|can't|don't|do not) (find|know|have|provide))"
-          ],
-          "poisoned_srcs": [],
-          "retry_count": 2,
-          "refined": true
-        },
-        "sources": [
-          {
-            "source": "data_poisoning_attacks.pdf",
-            "poisoned": false,
-            "snippet": "4. Defense Strategies\nInput sanitization should be applied to all documents before ingestion. Cryptographic hashing can verify\ndocument integrity at r"
+            "snippet": "5. Vector Databases\nFAISS (Facebook AI Similarity Search) is an open-source library for efficient similarity search. It\nsupports CPU and GPU operation"
           },
           {
             "source": "data_poisoning_attacks.pdf",
@@ -123,73 +55,141 @@
           {
             "source": "data_poisoning_attacks.pdf",
             "poisoned": false,
-            "snippet": "recently added sources.\nConfidence Scoring: Use embedding similarity between the query and retrieved chunks to detect\nlow-relevance retrievals.\nSemant"
+            "snippet": "Data Poisoning Attacks in AI and RAG Systems\nData poisoning is a type of adversarial attack in which an attacker intentionally corrupts the training\nd"
           },
           {
-            "source": "rag_systems_guide.pdf",
+            "source": "data_poisoning_attacks.pdf",
             "poisoned": false,
-            "snippet": "deployments.\n6. RAG Evaluation Metrics\nFaithfulness: Measures whether the answer is grounded in the retrieved context. Score 0-1.\nAnswer Relevancy: Me"
+            "snippet": "1. Categories of Poisoning Attacks\nLabel Flipping: Correct content is replaced with factually opposite information. For example, replacing\n'treatment"
           }
         ]
-      }
-    ]
-  },
-  "chat_20260413_101710": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr 2026, 10:17",
-    "messages": []
-  },
-  "chat_20260413_101711": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr 2026, 10:17",
-    "messages": []
-  },
-  "chat_20260413_102137": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 10:21",
-    "messages": []
-  },
-  "chat_20260413_102155": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 10:21",
-    "messages": []
-  },
-  "chat_20260413_104530": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 10:45",
-    "messages": []
-  },
-  "chat_20260413_104711": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 10:47",
-    "messages": []
-  },
-  "chat_20260413_104834": {
-    "title": "machine learning",
-    "mode": "Clean",
-    "created": "13 Apr, 10:48",
-    "messages": [
+      },
       {
         "role": "user",
-        "content": "machine learning",
-        "time": "11:00"
+        "content": "What are backdoor attacks?",
+        "time": "10:08"
       },
       {
         "role": "assistant",
-        "content": "Machine learning (ML) is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on developing computer programs that can access data and use it to learn for themselves.",
-        "time": "11:00",
+        "content": "Backdoor attacks are a type of poisoning attack where a trigger phrase is embedded in malicious documents. When the trigger appears in a query, the system returns attacker-controlled content.",
+        "time": "10:08",
         "validation": {
           "passed": true,
           "issues": [],
           "poisoned_srcs": [],
           "retry_count": 0,
-          "refined": false
+          "refined": false,
+          "is_greeting": false,
+          "no_info": false
+        },
+        "sources": [
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "1. Categories of Poisoning Attacks\nLabel Flipping: Correct content is replaced with factually opposite information. For example, replacing\n'treatment"
+          },
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "Data Poisoning Attacks in AI and RAG Systems\nData poisoning is a type of adversarial attack in which an attacker intentionally corrupts the training\nd"
+          },
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "be misled by plausible-looking but false retrieved context. Backdoor attacks can cause the system to\nleak sensitive information when triggered. Noise"
+          },
+          {
+            "source": "data_poisoning_attacks.pdf",
+            "poisoned": false,
+            "snippet": "4. Defense Strategies\nInput sanitization should be applied to all documents before ingestion. Cryptographic hashing can verify\ndocument integrity at r"
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "Checks for poisoned sources or contradictions in context",
+        "time": "10:09"
+      },
+      {
+        "role": "assistant",
+        "content": "FAISS is a relational database optimised for storing JSON documents.",
+        "time": "10:09",
+        "validation": {
+          "passed": false,
+          "issues": [
+            "misleading_content_detected \u2014 answer contains suspicious instructions"
+          ],
+          "poisoned_srcs": [],
+          "retry_count": 2,
+          "refined": true,
+          "is_greeting": false,
+          "no_info": false
+        },
+        "sources": []
+      },
+      {
+        "role": "user",
+        "content": "autonomously retries with refined prompt (max 2\u00d7)",
+        "time": "10:16"
+      },
+      {
+        "role": "assistant",
+        "content": "Gradient descent always guarantees finding the global minimum in any loss landscape.",
+        "time": "10:16",
+        "validation": {
+          "passed": false,
+          "issues": [
+            "misleading_content_detected \u2014 answer contains suspicious instructions"
+          ],
+          "poisoned_srcs": [],
+          "retry_count": 2,
+          "refined": true,
+          "is_greeting": false,
+          "no_info": false
+        },
+        "sources": []
+      },
+      {
+        "role": "user",
+        "content": " RAG retrieves top-4 chunks from knowledge base",
+        "time": "10:18"
+      },
+      {
+        "role": "assistant",
+        "content": "Supervised learning is great for solving classification and regression problems!",
+        "time": "10:18",
+        "validation": {
+          "passed": false,
+          "issues": [
+            "misleading_content_detected \u2014 answer contains suspicious instructions"
+          ],
+          "poisoned_srcs": [],
+          "retry_count": 2,
+          "refined": true,
+          "is_greeting": false,
+          "no_info": false
+        },
+        "sources": []
+      },
+      {
+        "role": "user",
+        "content": "What is supervised learning?",
+        "time": "10:19"
+      },
+      {
+        "role": "assistant",
+        "content": "Supervised learning is a type of machine learning where the algorithm learns from labeled training data. In this type of learning, each training example consists of an input and the desired output. The goal of supervised learning is to enable the algorithm to learn from the labeled data and make predictions on new, unseen data. Common algorithms used in supervised learning include Linear Regression, Decision Trees, Support Vector Machines, and Neural Networks. Applications of supervised learning include spam detection, image classification, and price prediction. The algorithm is trained on the labeled data to learn the relationship between the input and the desired output, and it can then use this learned relationship to make predictions on new data.",
+        "time": "10:19",
+        "validation": {
+          "passed": false,
+          "issues": [
+            "answer_contradicts_context (context: 'unsupervised' \u2014 answer says 'supervised')"
+          ],
+          "poisoned_srcs": [],
+          "retry_count": 2,
+          "refined": true,
+          "is_greeting": false,
+          "no_info": false
         },
         "sources": [
           {
@@ -205,71 +205,7 @@
           {
             "source": "machine_learning_intro.pdf",
             "poisoned": false,
-            "snippet": "open-source platform for machine learning developed by Google. PyTorch is a deep learning\nframework developed by Facebook's AI Research lab. Pandas is"
-          },
-          {
-            "source": "machine_learning_intro.pdf",
-            "poisoned": false,
-            "snippet": "PCA reduce the number of features. Applications include customer segmentation and anomaly\ndetection.\nReinforcement Learning: An agent learns by intera"
-          }
-        ]
-      }
-    ]
-  },
-  "chat_20260413_111143": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 11:11",
-    "messages": []
-  },
-  "chat_20260413_111213": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 11:12",
-    "messages": []
-  },
-  "chat_20260413_112035": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 11:20",
-    "messages": []
-  },
-  "chat_20260413_144011": {
-    "title": "what is machine learning",
-    "mode": "Clean",
-    "created": "13 Apr, 14:40",
-    "messages": [
-      {
-        "role": "user",
-        "content": "what is machine learning",
-        "time": "14:40"
-      },
-      {
-        "role": "assistant",
-        "content": "Machine learning (ML) is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on developing computer programs that can access data and use it to learn for themselves.",
-        "time": "14:40",
-        "validation": {
-          "passed": true,
-          "issues": [],
-          "poisoned_srcs": [],
-          "retry_count": 0,
-          "refined": false
-        },
-        "sources": [
-          {
-            "source": "machine_learning_intro.pdf",
-            "poisoned": false,
-            "snippet": "Introduction to Machine Learning\nMachine learning (ML) is a subset of artificial intelligence that enables systems to learn and improve\nfrom experienc"
-          },
-          {
-            "source": "machine_learning_intro.pdf",
-            "poisoned": false,
-            "snippet": "of an input and the desired output. Common algorithms include Linear Regression, Decision Trees,\nSupport Vector Machines, and Neural Networks. Applica"
-          },
-          {
-            "source": "machine_learning_intro.pdf",
-            "poisoned": false,
-            "snippet": "open-source platform for machine learning developed by Google. PyTorch is a deep learning\nframework developed by Facebook's AI Research lab. Pandas is"
+            "snippet": "Features: Individual measurable properties of the data used as inputs to the model.\nLabels: The output variable the model is trained to predict in sup"
           },
           {
             "source": "machine_learning_intro.pdf",
@@ -279,11 +215,5 @@
         ]
       }
     ]
-  },
-  "chat_20260413_193833": {
-    "title": "New conversation",
-    "mode": "Clean",
-    "created": "13 Apr, 19:38",
-    "messages": []
   }
 }
