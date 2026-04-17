@@ -1,7 +1,4 @@
-"""
-src/rag_pipeline.py
-Phase 3 — RAG pipeline: retrieval + Groq LLM (free API).
-"""
+
 
 import os
 from dotenv import load_dotenv

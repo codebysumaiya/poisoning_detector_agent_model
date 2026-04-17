@@ -1,16 +1,3 @@
-"""
-src/poisoning.py
-Phase 5 — Data Poisoning Attacks.
-
-Implements four attack types:
-  1. Label Flipping    — flip factual content to its opposite
-  2. Backdoor Trigger  — inject chunks that activate on a trigger phrase
-  3. Noise Injection   — add irrelevant off-topic chunks
-  4. Semantic Poison   — subtle rephrasing that changes meaning
-
-Each function returns a NEW list (original is never mutated).
-All injected chunks carry metadata poisoned=True for traceability.
-"""
 
 import copy
 import random

@@ -1,10 +1,3 @@
-"""
-src/ingestion.py
-Phase 1 & 2 — PDF ingestion, text chunking, embedding, vector store creation.
-
-Run directly:
-    python src/ingestion.py
-"""
 
 import os
 import glob
@@ -22,8 +15,8 @@ init(autoreset=True)
 PDF_DIR        = "data/raw_pdfs"
 FAISS_INDEX    = "data/faiss_index"
 EMBED_MODEL    = "sentence-transformers/all-MiniLM-L6-v2"   # fast on CPU
-CHUNK_SIZE     = 512
-CHUNK_OVERLAP  = 64
+CHUNK_SIZE     = 500
+CHUNK_OVERLAP  = 50
 
 
 def load_pdfs(pdf_dir: str) -> list:

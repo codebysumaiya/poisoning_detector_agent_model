@@ -1,18 +1,3 @@
-"""
-src/file_watcher.py
-Watches data/raw_pdfs/ for new PDF files dropped in from outside.
-When a new file is detected:
-  1. Loads and chunks the PDF
-  2. Scans every chunk for poisoning
-  3. Rejects poisoned chunks
-  4. Ingests only clean chunks into FAISS
-  5. Updates the app's knowledge base live
-
-Run standalone:
-    python src/file_watcher.py
-
-Or import and call start_watching() from your app.
-"""
 
 import os
 import sys

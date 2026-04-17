@@ -155,9 +155,9 @@ def _proxy_metrics(records: list) -> dict:
     def word_set(text: str) -> set:
         return set(re.findall(r'\b\w{4,}\b', text.lower()))
 
-    faithfulness_scores    = []
-    answer_relevancy_scores = []
-    context_recall_scores  = []
+    faithfulness_scores      = []
+    answer_relevancy_scores  = []
+    context_recall_scores    = []
     context_precision_scores = []
 
     for r in records:
@@ -194,6 +194,34 @@ def _proxy_metrics(records: list) -> dict:
         "context_recall":    mean(context_recall_scores),
         "context_precision": mean(context_precision_scores),
     }
+
+
+def print_score_table(scores: dict, label: str) -> None:
+    """
+    Print metric scores as a clean formatted table in the terminal.
+    Color-coded: Green >= 0.75, Yellow >= 0.50, Red < 0.50
+    Includes a visual progress bar for each metric.
+    """
+    print(f"\n{'─'*50}")
+    print(f"  📊  Scores for: {label}")
+    print(f"{'─'*50}")
+    print(f"  {'Metric':<24} {'Score':>6}   {'Bar'}")
+    print(f"  {'─'*44}")
+
+    for metric, value in scores.items():
+        if value >= 0.75:
+            color = Fore.GREEN
+        elif value >= 0.50:
+            color = Fore.YELLOW
+        else:
+            color = Fore.RED
+
+        filled = int(value * 10)
+        bar    = "█" * filled + "░" * (10 - filled)
+
+        print(f"  {metric:<24} {color}{value:>6.3f}   {bar}{Style.RESET_ALL}")
+
+    print(f"{'─'*50}\n")
 
 
 def print_comparison(clean_scores: dict,
@@ -256,7 +284,9 @@ if __name__ == "__main__":
     print(f"\n{Fore.CYAN}Step 2: Evaluating CLEAN system...{Style.RESET_ALL}")
     clean_records = collect_results(clean_chain, clean_monitor, EVAL_DATASET)
     clean_scores  = run_ragas_evaluation(clean_records, "CLEAN")
-    print(f"  Clean scores: {clean_scores}")
+
+    # ── Print clean score table ────────────────────────────────────
+    print_score_table(clean_scores, "CLEAN RAG")
 
     # ── Step 3: apply poisoning attacks and evaluate each ─────────
     docs   = load_pdfs(PDF_DIR)
@@ -282,6 +312,9 @@ if __name__ == "__main__":
 
         poisoned_records = collect_results(poisoned_chain, poisoned_monitor, EVAL_DATASET)
         poisoned_scores  = run_ragas_evaluation(poisoned_records, attack_name)
+
+        # ── Print poisoned score table ─────────────────────────────
+        print_score_table(poisoned_scores, f"POISONED — {attack_name}")
 
         comparison = print_comparison(clean_scores, poisoned_scores, attack_name)
         all_comparisons[attack_name] = comparison

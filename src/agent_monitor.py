@@ -1,13 +1,3 @@
-"""
-src/agent_monitor.py  — UPDATED v4
-Phase 4 — Agentic Monitor: validates RAG responses and triggers refinement.
-
-Changes vs v3:
-  1. Live evaluation printed to VSCode terminal whenever poisoning is detected
-  2. Uses _proxy_metrics() from evaluation.py (no RAGAS install needed)
-  3. Demo sidebar steps still return per-step irrelevant poisoned answers
-  4. Greetings / normal RAG answers unchanged
-"""
 
 import re
 from dataclasses import dataclass, field

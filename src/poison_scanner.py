@@ -1,14 +1,3 @@
-"""
-src/poison_scanner.py
-Scans incoming document chunks for poisoning patterns BEFORE they enter FAISS.
-This is the real-time outside attack detection layer.
-
-How it works:
-  1. Every new chunk is scored against known poisoning signatures
-  2. Chunks that score above the threshold are REJECTED
-  3. A detailed report is returned explaining why each chunk was flagged
-  4. Only clean chunks are allowed into the vector store
-"""
 
 import re
 from dataclasses import dataclass, field

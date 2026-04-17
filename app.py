@@ -1,9 +1,3 @@
-"""
-app.py — SentinelRAG
-Clean chat interface with autonomous poisoning detection
-+ Real-time outside attack detection via file watcher
-Run: streamlit run app.py
-"""
 
 import os, sys, json, re, threading
 import streamlit as st
@@ -23,6 +17,17 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# ──────────────────────────────────────────────────────────────────
+# STRIP HTML HELPER — prevents raw tags leaking into UI
+# ──────────────────────────────────────────────────────────────────
+def strip_html_tags(text: str) -> str:
+    """Remove any raw HTML tags and entities from text before rendering."""
+    text = re.sub(r'<[^>]+>', '', text)          # remove all HTML tags
+    text = re.sub(r'&nbsp;', ' ', text)           # fix &nbsp;
+    text = re.sub(r'&[a-z]+;', '', text)          # remove other HTML entities
+    text = re.sub(r'\s+', ' ', text).strip()      # collapse whitespace
+    return text
 
 # ──────────────────────────────────────────────────────────────────
 # STYLES
@@ -132,8 +137,8 @@ button[title="Collapse sidebar"] {
 .user-bub {
     background: #f3f3f3; color: #111;
     padding: 10px 16px; max-width: 70%;
-    min-width: 60px;          /* ← ADD THIS */
-    text-align: center;       /* ← ADD THIS — centers short text like 'hi' */
+    min-width: 70px;
+    text-align: center;
     border-radius: 18px 18px 4px 18px;
     font-size: 13.5px; line-height: 1.65;
 }
@@ -179,7 +184,6 @@ button[title="Collapse sidebar"] {
 .popup-title  { font-weight: 600; color: #dc2626; font-size: 13px; margin-bottom: 7px; }
 .popup-issue  { color: #7f1d1d; font-size: 12.5px; margin: 3px 0; }
 .popup-src    { color: #7f1d1d; font-size: 12px; margin-top: 6px; }
-.popup-meta   { color: #999; font-size: 11px; margin-top: 6px; }
 .attack-tag {
     display: inline-block; margin-top: 7px;
     background: #fef2f2; color: #b91c1c;
@@ -188,7 +192,7 @@ button[title="Collapse sidebar"] {
     font-size: 11px; font-weight: 600;
 }
 
-/* Outside attack alert banner — added from Doc 2 */
+/* Outside attack alert banner */
 .outside-alert {
     background: #fef2f2; border: 1.5px solid #fca5a5;
     border-left: 4px solid #dc2626; border-radius: 10px;
@@ -211,7 +215,7 @@ button[title="Collapse sidebar"] {
     font-size: 12.5px; color: #166534;
 }
 
-/* Sidebar alert items — added from Doc 2 */
+/* Sidebar alert items */
 .sb-alert-item {
     margin: 3px 10px; padding: 8px 11px;
     border-radius: 8px; font-size: 11px; line-height: 1.4;
@@ -320,8 +324,8 @@ st.markdown("""
 # ──────────────────────────────────────────────────────────────────
 STORE_PATH   = "data/faiss_index"
 HISTORY_FILE = "results/chat_history.json"
-ALERT_FILE   = "results/attack_alerts.json"   # ← added from Doc 2
-PDF_DIR      = "data/raw_pdfs"                 # ← added from Doc 2
+ALERT_FILE   = "results/attack_alerts.json"
+PDF_DIR      = "data/raw_pdfs"
 
 SAMPLE_QS = [
     "What is supervised learning?",
@@ -349,7 +353,7 @@ GREETING_PATTERNS = [
     r"^(yes|no|maybe|please|please help)[\s!.,?]*$",
 ]
 
-# ── Direct greeting replies — never touch RAG for these ──────────
+# ── Direct greeting replies ────────────────────────────────────────
 GREETING_REPLIES = {
     "hi":              "Hi there! 👋 How can I help you today?",
     "hello":           "Hello! 😊 Feel free to ask me anything about your documents.",
@@ -381,7 +385,6 @@ def get_greeting_reply(text: str) -> str:
             return reply
     return "Hi! 😊 How can I help you today?"
 
-# ── Only the EXACT full-sentence refusal triggers poisoning flag ──
 HARD_REFUSAL_PHRASES = [
     "i cannot find this information in the provided documents",
     "i can't find this information in the provided documents",
@@ -391,17 +394,15 @@ HARD_REFUSAL_PHRASES = [
 ]
 
 # ──────────────────────────────────────────────────────────────────
-# FILE WATCHER — added from Doc 2, runs in background thread
+# FILE WATCHER
 # ──────────────────────────────────────────────────────────────────
 def start_file_watcher_background():
-    """Start the file watcher in a daemon thread so it doesn't block the app."""
     from src.file_watcher import start_watching
     thread = threading.Thread(target=start_watching, daemon=True)
     thread.start()
     return thread
 
 def get_latest_alerts(n: int = 5) -> list:
-    """Load the most recent attack alerts from file."""
     if not os.path.exists(ALERT_FILE):
         return []
     try:
@@ -430,83 +431,50 @@ def save_history(h):
         json.dump(h, f, indent=2)
 
 def is_greeting(text: str) -> bool:
-    """Return True if the input is a simple greeting — never flag these."""
     t = text.strip().lower()
     return any(re.match(p, t) for p in GREETING_PATTERNS)
 
 def is_hard_refusal(answer: str) -> bool:
-    """
-    Only flag when the ENTIRE answer is exactly a known refusal phrase.
-    Partial matches inside longer answers are NOT flagged.
-    """
     a = answer.strip().lower().rstrip(".")
     return any(a == phrase or a == phrase + "." for phrase in HARD_REFUSAL_PHRASES)
 
 def is_true_poisoning(val: dict, answer: str, question: str) -> bool:
-    """
-    Returns True ONLY for genuine poisoning:
-      - Injection / misleading payload in the answer, OR
-      - Factual contradiction detected (label-flip), OR
-      - Poisoned source chunks retrieved.
-    Does NOT flag: greetings, no-info responses, normal RAG answers.
-    """
     if is_greeting(question):
         return False
     if val.get("is_greeting"):
         return False
     if val.get("no_info"):
-        return False          # "I cannot find..." is no-info, not an attack
+        return False
     p_srcs = val.get("poisoned_srcs", [])
     issues = val.get("issues", [])
     passed = val.get("passed", True)
     if p_srcs:
         return True
-    # Only flag if a real attack issue is present
     attack_keywords = ["misleading", "contradiction", "injection", "poisoned"]
     if not passed and any(any(kw in i.lower() for kw in attack_keywords) for i in issues):
         return True
     return False
 
 def clean_issues(issues: list) -> list:
-    """
-    Convert raw technical issue strings into clean human-readable sentences.
-    Strips HTML tags, regex patterns, and internal codes.
-    """
     clean = []
     for issue in issues:
-        # Skip if it contains raw HTML tags
         if re.search(r"<[^>]+>", issue):
             continue
-        # Skip raw regex patterns (contain |, ?, grouped parentheses)
         if re.search(r"\(\?|can't\|can't|\|don't\|", issue):
             continue
         if "|" in issue and "(" in issue and ")" in issue:
             continue
-
-        # Map internal codes to friendly messages
-        issue = re.sub(r"answer_too_short.*",
-                       "Response is too short to be useful", issue)
-        issue = re.sub(r"refusal_detected.*",
-                       "Response contains a refusal — no useful answer provided", issue)
-        issue = re.sub(r"hard_refusal_detected.*",
-                       "Response contains no useful information", issue)
-        issue = re.sub(r"low_context_overlap.*",
-                       "Response is not grounded in the document content", issue)
-        issue = re.sub(r"very_low_context_overlap.*",
-                       "Response is not grounded in the document content", issue)
-        issue = re.sub(r"misleading_content_detected.*",
-                       "Response contains suspicious or misleading content", issue)
-        issue = re.sub(r"answer_contradicts_context.*",
-                       "Response contradicts information in the retrieved documents", issue)
-        issue = re.sub(r"possible_contradiction.*",
-                       "Contradiction detected between retrieved document chunks", issue)
-        issue = re.sub(r"poisoned_sources_detected:.*",
-                       "Poisoned document sources were retrieved", issue)
-        issue = re.sub(r"poisoned_sources_in_context:.*",
-                       "Poisoned document sources were retrieved", issue)
-        issue = re.sub(r"no_context_retrieved",
-                       "No relevant context was retrieved from the knowledge base", issue)
-
+        issue = re.sub(r"answer_too_short.*",           "Response is too short to be useful", issue)
+        issue = re.sub(r"refusal_detected.*",           "Response contains a refusal — no useful answer provided", issue)
+        issue = re.sub(r"hard_refusal_detected.*",      "Response contains no useful information", issue)
+        issue = re.sub(r"low_context_overlap.*",        "Response is not grounded in the document content", issue)
+        issue = re.sub(r"very_low_context_overlap.*",   "Response is not grounded in the document content", issue)
+        issue = re.sub(r"misleading_content_detected.*","Response contains suspicious or misleading content", issue)
+        issue = re.sub(r"answer_contradicts_context.*", "Response contradicts information in the retrieved documents", issue)
+        issue = re.sub(r"possible_contradiction.*",     "Contradiction detected between retrieved document chunks", issue)
+        issue = re.sub(r"poisoned_sources_detected:.*", "Poisoned document sources were retrieved", issue)
+        issue = re.sub(r"poisoned_sources_in_context:.*","Poisoned document sources were retrieved", issue)
+        issue = re.sub(r"no_context_retrieved",         "No relevant context was retrieved from the knowledge base", issue)
         issue = issue.strip()
         if issue:
             clean.append(issue)
@@ -514,13 +482,13 @@ def clean_issues(issues: list) -> list:
 
 def get_attack_type(p_srcs: list, issues: list) -> str:
     issue_str = " ".join(issues).lower()
-    if "noise_document" in str(p_srcs).lower():          return "Noise Injection"
-    if "confidential"   in str(p_srcs).lower():          return "Backdoor Trigger"
-    if p_srcs:                                            return "Semantic / Label Poisoning"
-    if "misleading"     in issue_str:                     return "Backdoor / Injection Attack"
-    if "contradicts"    in issue_str:                     return "Label Flipping Attack"
-    if "no useful"      in issue_str:                     return "Irrelevant Response"
-    if "refusal"        in issue_str:                     return "Irrelevant Response"
+    if "noise_document" in str(p_srcs).lower():   return "Noise Injection"
+    if "confidential"   in str(p_srcs).lower():   return "Backdoor Trigger"
+    if p_srcs:                                     return "Semantic / Label Poisoning"
+    if "misleading"     in issue_str:              return "Backdoor / Injection Attack"
+    if "contradicts"    in issue_str:              return "Label Flipping Attack"
+    if "no useful"      in issue_str:              return "Irrelevant Response"
+    if "refusal"        in issue_str:              return "Irrelevant Response"
     return "Data Poisoning Detected"
 
 def fmt_decision(val: dict, answer: str = "", question: str = "") -> str:
@@ -545,7 +513,7 @@ def get_chain_monitor(store_path: str):
     return chain, monitor
 
 # ──────────────────────────────────────────────────────────────────
-# START FILE WATCHER (once per session) — added from Doc 2
+# START FILE WATCHER
 # ──────────────────────────────────────────────────────────────────
 if "watcher_started" not in st.session_state:
     try:
@@ -555,75 +523,82 @@ if "watcher_started" not in st.session_state:
         st.session_state.watcher_started = False
 
 # ──────────────────────────────────────────────────────────────────
-# RENDER BOT MESSAGE
+# RENDER BOT MESSAGE  ← KEY FIX: use string concatenation, not f-string
 # ──────────────────────────────────────────────────────────────────
 def render_bot_message(msg: dict, question: str = ""):
     val     = msg.get("validation", {})
-    answer  = msg["content"]
+    answer  = strip_html_tags(msg["content"])   # ← clean raw HTML from answer
     issues  = clean_issues(val.get("issues", []))
     p_srcs  = val.get("poisoned_srcs", [])
-    retries = val.get("retry_count", 0)
-    refined = val.get("refined", False)
     time    = msg.get("time", "")
     no_info = val.get("no_info", False)
 
     is_bad = is_true_poisoning(val, answer, question)
 
     if is_bad:
-        attack     = get_attack_type(p_srcs, issues)
-        issue_html = "".join(f'<div class="popup-issue">• {i}</div>' for i in issues)
-        psrc_html  = (
-            f'<div class="popup-src">⚠️ Poisoned sources: {", ".join(p_srcs)}</div>'
+        attack = get_attack_type(p_srcs, issues)
+
+        # Build issue lines safely
+        issue_html = "".join(
+            '<div class="popup-issue">• ' + i + '</div>'
+            for i in issues
+        )
+
+        # Build poisoned source line safely
+        psrc_html = (
+            '<div class="popup-src">⚠️ Poisoned sources: ' + ", ".join(p_srcs) + '</div>'
             if p_srcs else ""
         )
-        html = f"""
-        <div class="chat-wrapper">
-          <div class="msg-bot-wrap">
-            <div class="bot-av">🛡️</div>
-            <div class="bot-content">
-              <div class="poisoned-response">
-                <div class="poisoned-label">⚠️ Poisoned / Fake information detected</div>
-                {answer}
-              </div>
-              <div class="poison-popup">
-                <div class="popup-title">🚨 Agent triggered — Poisoned / Wrong response detected!</div>
-                {issue_html}
-                {psrc_html}
-                <div class="popup-meta">
-                  Retried <b>{retries}×</b> &nbsp;·&nbsp;
-                  Refined: <b>{"Yes" if refined else "No"}</b>
-                </div>
-                <span class="attack-tag">{attack}</span>
-              </div>
-              <div class="msg-time">{time}</div>
-            </div>
-          </div>
-        </div>"""
+
+        # ── Use string concatenation — NOT f-string ──
+        html = (
+            '<div class="chat-wrapper">'
+              '<div class="msg-bot-wrap">'
+                '<div class="bot-av">🛡️</div>'
+                '<div class="bot-content">'
+                  '<div class="poisoned-response">'
+                    '<div class="poisoned-label">⚠️ Poisoned / Fake information detected</div>'
+                    + answer +
+                  '</div>'
+                  '<div class="poison-popup">'
+                    '<div class="popup-title">🚨 Agent triggered — Poisoned / Wrong response detected!</div>'
+                    + issue_html
+                    + psrc_html +
+                    '<span class="attack-tag">' + attack + '</span>'
+                  '</div>'
+                  '<div class="msg-time">' + time + '</div>'
+                '</div>'
+              '</div>'
+            '</div>'
+        )
+
     elif no_info:
-        # No information found — show a neutral info box, not a poison alert
-        html = f"""
-        <div class="chat-wrapper">
-          <div class="msg-bot-wrap">
-            <div class="bot-av">🛡️</div>
-            <div class="bot-content">
-              <div class="safe-response" style="color:#888;font-style:italic;">
-                ℹ️ {answer}
-              </div>
-              <div class="msg-time">{time}</div>
-            </div>
-          </div>
-        </div>"""
+        html = (
+            '<div class="chat-wrapper">'
+              '<div class="msg-bot-wrap">'
+                '<div class="bot-av">🛡️</div>'
+                '<div class="bot-content">'
+                  '<div class="safe-response" style="color:#888;font-style:italic;">'
+                    'ℹ️ ' + answer +
+                  '</div>'
+                  '<div class="msg-time">' + time + '</div>'
+                '</div>'
+              '</div>'
+            '</div>'
+        )
+
     else:
-        html = f"""
-        <div class="chat-wrapper">
-          <div class="msg-bot-wrap">
-            <div class="bot-av">🛡️</div>
-            <div class="bot-content">
-              <div class="safe-response">{answer}</div>
-              <div class="msg-time">{time}</div>
-            </div>
-          </div>
-        </div>"""
+        html = (
+            '<div class="chat-wrapper">'
+              '<div class="msg-bot-wrap">'
+                '<div class="bot-av">🛡️</div>'
+                '<div class="bot-content">'
+                  '<div class="safe-response">' + answer + '</div>'
+                  '<div class="msg-time">' + time + '</div>'
+                '</div>'
+              '</div>'
+            '</div>'
+        )
 
     st.markdown(html, unsafe_allow_html=True)
 
@@ -679,7 +654,6 @@ with st.sidebar:
     st.markdown("<hr style='border:none;border-top:1px solid #e5e5e5;margin:8px 0'>",
                 unsafe_allow_html=True)
 
-    # Previous chats
     st.markdown('<p class="sb-section">Previous chats</p>', unsafe_allow_html=True)
     sorted_ids = sorted(st.session_state.all_chats.keys(), reverse=True)
     if not sorted_ids:
@@ -711,7 +685,6 @@ with st.sidebar:
     st.markdown("<hr style='border:none;border-top:1px solid #e5e5e5;margin:8px 0'>",
                 unsafe_allow_html=True)
 
-    # Sample questions
     st.markdown('<p class="sb-section">Sample questions</p>', unsafe_allow_html=True)
     for q in SAMPLE_QS:
         if st.button(f"{q}", key=f"sq_{q}", use_container_width=True):
@@ -723,7 +696,6 @@ with st.sidebar:
     st.markdown("<hr style='border:none;border-top:1px solid #e5e5e5;margin:8px 0'>",
                 unsafe_allow_html=True)
 
-    # Session stats
     st.markdown('<p class="sb-section">Session stats</p>', unsafe_allow_html=True)
     s1, s2, s3 = st.columns(3)
     s1.metric("Queries", st.session_state.total_queries)
@@ -733,7 +705,6 @@ with st.sidebar:
     st.markdown("<hr style='border:none;border-top:1px solid #e5e5e5;margin:8px 0'>",
                 unsafe_allow_html=True)
 
-    # How agent decides
     st.markdown('<p class="sb-section">Demo: How the agent works</p>', unsafe_allow_html=True)
     steps_html = "".join(f"""
     <div class="demo-row">
@@ -742,7 +713,6 @@ with st.sidebar:
     </div>""" for i, step in enumerate(AGENT_STEPS))
     st.markdown(f'<div class="demo-box">{steps_html}</div>', unsafe_allow_html=True)
 
-    # Last decision
     if st.session_state.last_decision:
         st.markdown('<p class="sb-section">Last decision</p>', unsafe_allow_html=True)
         st.markdown(
@@ -772,7 +742,7 @@ st.markdown(f"""
   <span class="{badge_cls}">{badge_lbl}</span>
 </div>""", unsafe_allow_html=True)
 
-# ── Outside attack banner — added from Doc 2 ──────────────────────
+# ── Outside attack banner ──────────────────────────────────────────
 recent_alerts = get_latest_alerts(1)
 if recent_alerts:
     latest = recent_alerts[0]
@@ -815,17 +785,17 @@ if not msgs:
 for i, msg in enumerate(msgs):
     role = msg["role"]
     if role == "user":
-        st.markdown(f"""
-        <div class="chat-wrapper">
-          <div class="msg-user-wrap">
-            <div>
-              <div class="user-bub">{msg["content"]}</div>
-              <div class="msg-time">{msg.get("time", "")}</div>
-            </div>
-          </div>
-        </div>""", unsafe_allow_html=True)
+        st.markdown(
+            '<div class="chat-wrapper">'
+              '<div class="msg-user-wrap">'
+                '<div>'
+                  '<div class="user-bub">' + strip_html_tags(msg["content"]) + '</div>'
+                  '<div class="msg-time">' + msg.get("time", "") + '</div>'
+                '</div>'
+              '</div>'
+            '</div>',
+            unsafe_allow_html=True)
     else:
-        # Find the preceding user question for greeting detection
         prev_q = msgs[i - 1]["content"] if i > 0 and msgs[i - 1]["role"] == "user" else ""
         render_bot_message(msg, question=prev_q)
 
@@ -843,7 +813,7 @@ if q:
     if len(msgs) == 1:
         st.session_state.all_chats[aid]["title"] = q[:32] + ("..." if len(q) > 32 else "")
 
-    # ── Short-circuit greetings — never send to RAG ────────────────
+    # ── Short-circuit greetings ────────────────────────────────────
     if is_greeting(q):
         reply = get_greeting_reply(q)
         safe_val = {
@@ -863,7 +833,7 @@ if q:
         save_history(st.session_state.all_chats)
         st.rerun()
 
-    # ── RAG path for real questions ────────────────────────────────
+    # ── RAG path ───────────────────────────────────────────────────
     try:
         chain, monitor = get_chain_monitor(STORE_PATH)
     except Exception as e:
@@ -877,8 +847,6 @@ if q:
             val    = result["validation"]
             srcs   = result["sources"]
 
-            # True poisoning = injection OR label-flip OR poisoned source metadata
-            # NOT: greetings, no-info answers, normal RAG responses
             is_bad = is_true_poisoning(val, ans, q)
 
             msgs.append({
