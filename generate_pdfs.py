@@ -1,7 +1,3 @@
-"""
-generate_pdfs.py
-Run this once to create the 3 sample PDFs used by the RAG system.
-"""
 
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle

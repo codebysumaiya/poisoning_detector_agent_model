@@ -1,16 +1,3 @@
-"""
-main.py
-Full pipeline runner — runs all 6 phases in sequence.
-
-Usage:
-    python main.py                      # full pipeline
-    python main.py --phase ingestion    # only ingestion
-    python main.py --phase rag          # only RAG queries
-    python main.py --phase agent        # only agent monitor
-    python main.py --phase poison       # only poisoning demo
-    python main.py --phase eval         # only evaluation
-    python main.py --rebuild            # force rebuild vector store
-"""
 
 import argparse
 import sys

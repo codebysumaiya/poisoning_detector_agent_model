@@ -1,16 +1,4 @@
-"""
-src/evaluation.py
-Phase 6 — Evaluation: compare clean vs poisoned RAG using RAGAS metrics.
 
-Metrics measured:
-  - Faithfulness       : is the answer grounded in the retrieved context?
-  - Answer Relevancy   : is the answer relevant to the question?
-  - Context Precision  : are the retrieved chunks relevant?
-  - Context Recall     : does the context cover the ground truth?
-
-Run:
-    python src/evaluation.py
-"""
 
 import os
 import sys
